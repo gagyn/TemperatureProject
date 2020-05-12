@@ -13,7 +13,7 @@ For me the USB port where Arduino is plugged in, was /dev/ttyACM0. You may have 
 
 `docker run -d --device=/dev/ttyACM0 --name temperature temperature`
 
-Here 
+Again, you need to change the port to yours.
 
 ## After a few minutes, if you want to get all the temperatures data, use command:
 
