@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD [ "python", "./serialReader.py" ]
+CMD [ "python", "-u", "./serialReader.py" ]
