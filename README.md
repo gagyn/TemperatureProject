@@ -1,14 +1,20 @@
 # TemperatureProject
 Scanning and saving temperature using Raspberry PI and Arduino
 
-### Run the app using Docker:
+## Run the app using Docker:
 
-```git clone https://github.com/gagyn/TemperatureProject.git```
+`git clone https://github.com/gagyn/TemperatureProject.git`
 
-```docker build -t temperature .```
+### Now edit file ***config.txt*** with your Arduino port!
 
-```docker run -d --device=/dev/ttyACM0 --name temperature temperature```
+For me the USB port where Arduino is plugged in, was /dev/ttyACM0. You may have it somewhere else, so check it before.
 
-For me the USB port where the Arduino is plugged in, was /dev/ttyACM0. You may have it somewhere else, so check it before.
+`docker build -t temperature .`
 
-```docker logs temperature```
+`docker run -d --device=/dev/ttyACM0 --name temperature temperature`
+
+Here 
+
+## After a few minutes, if you want to get all the temperatures data, use command:
+
+`docker logs temperature`
