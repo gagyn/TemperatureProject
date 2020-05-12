@@ -18,3 +18,7 @@ Here
 ## After a few minutes, if you want to get all the temperatures data, use command:
 
 `docker logs temperature`
+
+alternatively:
+
+`docker exec -it temperature cat temperatures.txt`
