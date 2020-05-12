@@ -2,7 +2,12 @@ from typing import List
 import serial
 import datetime
 
-def readFewLines() -> List[str]:
+def get_arduino_port() -> str:
+    with open('config.txt') as configFile:
+        arduinoPort = configFile.readline().strip()
+        return arduinoPort
+
+def read_few_serial_lines() -> List[str]:
     lines = []
     for i in range(5):
         ser_bytes = ser.readline()
@@ -17,18 +22,15 @@ def readFewLines() -> List[str]:
             continue
     return lines
 
-def writeToFile(lines):
+def write_to_file(lines):
     with open('temperatures.txt', 'a') as file:
         for l in lines:
             file.write(l + '\n')
 
 if __name__ == '__main__':
-    arduinoPort = ''
-    with open('config.txt') as configFile:
-        arduinoPort = configFile.readline()
-
+    arduinoPort = get_arduino_port()
     ser = serial.Serial(port=arduinoPort, baudrate=19200)
 
     while True:
-        lines = readFewLines() # read few lines and save to file once in a while
-        writeToFile(lines)
+        lines = read_few_serial_lines() # read few lines and save to file once in a while
+        write_to_file(lines)
