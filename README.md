@@ -5,9 +5,9 @@ Scanning and saving temperature using Raspberry PI and Arduino
 
 `git clone https://github.com/gagyn/TemperatureProject.git`
 
-### Now edit file ***config.txt*** with your Arduino port!
+### Now edit file ***config.json*** with your Arduino port!
 
-For me the USB port where Arduino is plugged in, was /dev/ttyACM0. You may have it somewhere else, so check it before.
+For me the USB port where Arduino is plugged in, is /dev/ttyACM0. You may have it somewhere else, so check it before.
 
 `docker build -t temperature .`
 

@@ -1,0 +1,8 @@
+version: 3
+services:
+    temperatureScanner:
+        image: gagyn/temperature_project
+        restart: "unless-stopped"
+        volumes: 
+            - ./config.json:/app/config.json
+            - ./logs:/app/logs
