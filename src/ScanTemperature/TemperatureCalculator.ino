@@ -8,28 +8,28 @@ namespace TemperatureProject
   constexpr int R0 = 10000;
   constexpr double T0 = 273.15 + 25;
 
-  double TemperatureCalculator::calculateVoltage(const int rawValue)
+  inline double TemperatureCalculator::calculateVoltage(const int rawValue)
   {
     double b = rawValue * ARDUINO_MAX_VOLTAGE;
     double voltage = b / 1024.0;
     return voltage;
   }
 
-  double TemperatureCalculator::calculateResistance(const double voltage)
+  inline double TemperatureCalculator::calculateResistance(const double voltage)
   {
     double b = (ARDUINO_MAX_VOLTAGE / voltage) - 1;
     double R2 = R1 * b;
     return R2;
   }
 
-  double TemperatureCalculator::calculateTemp(const double resistance)
+  inline double TemperatureCalculator::calculateTemp(const double resistance)
   {
     double logR = log(resistance / R0);
     double reversedT = 1 / T0 + 1 / B * logR;
     return 1 / reversedT - 273.15;
   }
 
-  double TemperatureCalculator::getTemp(const int rawInputValue)
+  inline double TemperatureCalculator::getTemp(const int rawInputValue)
   {
     double voltage = this->calculateVoltage(rawInputValue);
     double resistance = this->calculateResistance(voltage);
