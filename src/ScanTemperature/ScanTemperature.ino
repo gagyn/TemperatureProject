@@ -18,22 +18,26 @@ namespace TemperatureProject
 
   public:
     TemperatureScanner();
-    double getValidatedTemp(const int numberOfRecords);
+    double printRecords(const int numberOfRecords);
   };
 } // namespace TemperatureProject
 
 void setup()
 {
   Serial.begin(19200);
+  Serial.setTimeout(100);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
 }
 
 void loop()
 {
-  const int numberOfRecords = 2000;
+  if (!Serial.available())
+  {
+    delay(100);
+    return;
+  }
+  int numberOfRecords = Serial.parseInt();
   TemperatureProject::TemperatureScanner scanner;
-  double temp = scanner.getValidatedTemp(numberOfRecords);
-  Serial.println(temp);
-  delay(30 * 1000);
+  scanner.printRecords(numberOfRecords);
 }

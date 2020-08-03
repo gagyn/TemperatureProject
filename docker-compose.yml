@@ -3,6 +3,8 @@ services:
     temperatureScanner:
         image: gagyn/temperature_project
         restart: "unless-stopped"
+        devices: 
+            - "/dev/ttyACM0"
         volumes: 
             - ./config.json:/app/config.json
             - ./logs:/app/logs

@@ -31,8 +31,8 @@ namespace TemperatureProject
 
   double TemperatureCalculator::getTemp(const int rawInputValue)
   {
-    double voltage = calculateVoltage(rawInputValue);
-    double resistance = calculateResistance(voltage);
-    return calculateTemp(resistance);
+    double voltage = this->calculateVoltage(rawInputValue);
+    double resistance = this->calculateResistance(voltage);
+    return this->calculateTemp(resistance);
   }
-}
+} // namespace TemperatureProject
