@@ -1,8 +1,8 @@
-import pymongo
+from flask_pymongo import PyMongo
 
 class Session:
-    def __init__(self, mongoConnectionString: str):
-        self.client = pymongo.MongoClient(mongoConnectionString)
+    def __init__(self, mongoClient: PyMongo):
+        self.client = mongoClient
         self.database = self.client["temperatureProject"]
     
     def add(self, entity):
