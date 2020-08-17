@@ -1,9 +1,8 @@
 from flask_pymongo import PyMongo
 
-class Session:
+class MongoHandler:
     def __init__(self, mongoClient: PyMongo):
         self.client = mongoClient
-        self.database = self.client["temperatureProject"]
     
     def add(self, entity):
         collection = self.__get_collection(entity)
@@ -13,4 +12,4 @@ class Session:
         collection = self.__get_collection(entity)
 
     def __get_collection(self, entity):
-        return self.database(type(entity).__name__ + 's')
+        return self.client(type(entity).__name__ + 's')
