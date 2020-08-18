@@ -5,8 +5,8 @@ from Common.Integration.Mongo.MongoHandler import MongoHandler
 
 app = Flask(__name__)
 
-with open('config.json') as config_file:
-    data = json.load(config_file)
+with open('config.json') as configFile:
+    data = json.load(configFile)
     
 app.config['MONGO_DBNAME'] = data['mongoDbName']
 app.config['MONGO_URI'] = data['mongoConnectionString']
@@ -14,8 +14,8 @@ app.config['MONGO_URI'] = data['mongoConnectionString']
 mongo = PyMongo(app)
 mongoHandler = MongoHandler(mongo)
 
-@app.route('/', methods=['GET'])
-def index():
+@app.route('/readnow', methods=['GET'])
+def read_now():
     return jsonify({'text': 'hello index'})
 
 @app.route('/hello_world', methods=['GET'])
