@@ -1,0 +1,6 @@
+import serial
+
+class SerialWriter:
+    def __init__(self, arduinoPort: str):
+        self.ser = serial.Serial(port=arduinoPort, baudrate=19200)
+        self.arduinoPort = arduinoPort

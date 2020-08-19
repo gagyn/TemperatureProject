@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 import json
-from Common.Integration.Mongo.MongoHandler import MongoHandler
 
 app = Flask(__name__)
 
@@ -12,7 +11,6 @@ app.config['MONGO_DBNAME'] = data['mongoDbName']
 app.config['MONGO_URI'] = data['mongoConnectionString']
 
 mongo = PyMongo(app)
-mongoHandler = MongoHandler(mongo)
 
 @app.route('/readnow', methods=['GET'])
 def read_now():

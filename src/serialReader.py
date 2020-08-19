@@ -2,13 +2,6 @@ from typing import List
 import serial
 import datetime
 
-
-def get_arduino_port() -> str:
-    with open('config.txt') as configFile:
-        arduinoPort = configFile.readline().strip()
-        return arduinoPort
-
-
 def read_few_serial_lines() -> List[str]:
     lines = []
     for i in range(5):
