@@ -11,4 +11,7 @@ class ArduinoService:
     def read_now(self, records_count = 0):
         if records_count == 0:
             records_count = self.configurationService.get_records_count()
+
         self.serialWriter.write(records_count)
+        records = self.serialReader.read(records_count)
+        return records
