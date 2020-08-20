@@ -37,7 +37,7 @@ void loop()
     delay(100);
     return;
   }
-  int numberOfRecords = Serial.parseInt();
+  int numberOfRecords = Serial.readString().toInt();
   TemperatureProject::TemperatureScanner scanner;
   scanner.printRecords(numberOfRecords);
 }

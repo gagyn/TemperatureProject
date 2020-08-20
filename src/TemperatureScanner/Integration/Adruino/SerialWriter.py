@@ -1,6 +1,11 @@
-import serial
+from serial import Serial
+from struct import pack
+import binascii
 
 class SerialWriter:
     def __init__(self, arduinoPort: str):
-        self.ser = serial.Serial(port=arduinoPort, baudrate=19200)
         self.arduinoPort = arduinoPort
+
+    def write(self, stringToWrite: Any):
+        with Serial(self.arduinoPort, baudrate=19200, timeout=2000) as serial:
+            serial.write(str(stringToWrite).encode())
