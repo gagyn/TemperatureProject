@@ -1,5 +1,5 @@
-from TemperatureScanner.Integration.Adruino.SerialReader import SerialReader
-from TemperatureScanner.Integration.Adruino.SerialWriter import SerialWriter
+from Integration.Adruino.SerialReader import SerialReader
+from Integration.Adruino.SerialWriter import SerialWriter
 from Common.Configuration.ConfigurationService import ConfigurationService
 
 class ArduinoService:

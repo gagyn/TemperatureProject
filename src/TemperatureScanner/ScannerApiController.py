@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 import json
-from TemperatureScanner.Services.ArduinoService import ArduinoService
-from TemperatureScanner.Integration.Adruino.SerialReader import SerialReader
-from TemperatureScanner.Integration.Adruino.SerialWriter import SerialWriter
+from Services.ArduinoService import ArduinoService
+from Integration.Adruino.SerialReader import SerialReader
+from Integration.Adruino.SerialWriter import SerialWriter
 from Common.Configuration.ConfigurationService import ConfigurationService
 from datetime import datetime
 
