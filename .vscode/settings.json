@@ -1,4 +1,4 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
-    "python.pythonPath": "C:\\Users\\gagyn\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe"
+    "python.pythonPath": "venv\\Scripts\\python.exe"
 }

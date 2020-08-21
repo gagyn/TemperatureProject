@@ -5,5 +5,5 @@ class SerialWriter:
         self.arduinoPort = arduinoPort
 
     def write(self, stringToWrite):
-        with Serial(self.arduinoPort, baudrate=19200, timeout=2000) as serial:
+        with Serial(self.arduinoPort, baudrate=19200, write_timeout=2) as serial:
             serial.write(str(stringToWrite).encode())

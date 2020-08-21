@@ -12,6 +12,7 @@ if __name__ == '__main__':
     configurationService = ConfigurationService(pymongo)
     arduinoPort = configurationService.get_arduino_port()
 
-    with Serial(arduinoPort, baudrate=19200, timeout=100) as serial:
-        number = int(serial.read())
-        print(number)
+    with Serial(arduinoPort, baudrate=19200, timeout=5) as serial:
+        bytesFromSerial = serial.readlines(3)
+    lines = [x.decode() for x in bytesFromSerial]
+    print(lines)
