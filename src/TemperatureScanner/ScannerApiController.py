@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 import json
-from Services.ArduinoService import ArduinoService
-from Integration.Adruino.SerialReader import SerialReader
-from Integration.Adruino.SerialWriter import SerialWriter
+from TemperatureScanner.Services.ArduinoService import ArduinoService
+from TemperatureScanner.Integration.Adruino.SerialReader import SerialReader
+from TemperatureScanner.Integration.Adruino.SerialWriter import SerialWriter
 from Common.Configuration.ConfigurationService import ConfigurationService
+from TemperatureScanner.Services.FrequentRecordsReaderService import FrequentRecordsReaderService
 from datetime import datetime
+import threading
 
 app = Flask(__name__)
 
@@ -22,6 +24,9 @@ port = configurationService.get_arduino_port()
 serialReader = SerialReader(port)
 serialWriter = SerialWriter(port)
 arduinoService = ArduinoService(serialReader, serialWriter, configurationService)
+frequentRecordsReaderService = FrequentRecordsReaderService(configurationService, arduinoService, mongo)
+backgroundThread = threading.Thread(target=frequentRecordsReaderService.read_frequently, name='frequentRecordsReader')
+backgroundThread.start()
 
 @app.route('/readnow', methods=['GET'])
 def read_now():
@@ -41,5 +46,6 @@ def set_records_count():
     recordsCount = int(request.json['recordsCount'])
     configurationService.set_records_count(recordsCount)
     return jsonify({'text': 'OK - Records count changed'})
+
 
 app.run()

@@ -8,33 +8,37 @@ class ConfigurationService:
 
     def get_records_count(self) -> int:
         recordsCount = self.__get_configuration_by_name('recordsCount')
-        if recordsCount == None:
-            return 1000
+        if recordsCount is None:
+            return int(self.__get_default_value_from_config_file('recordsCount'))
         return recordsCount['value']
 
     def set_records_count(self, recordsCount: int):
         recordsCountEntity = {'name': 'recordsCount', 'createdAt': datetime.now(), 'value': recordsCount}
         self.__save_new_configuration(recordsCountEntity)
 
-    def get_records_frequency(self):
-        pass
+    def get_records_seconds_between(self) -> int:
+        secondsBetween = self.__get_configuration_by_name('secondsBetween')
+        if secondsBetween is None:
+            return int(self.__get_default_value_from_config_file('secondsBetween'))
+        return secondsBetween
 
-    def set_records_frequency(self, frequency):
-        pass
+    def set_records_seconds_between(self, secondsBetween: int):
+        secondsBetweenEntity = {'name': 'secondsBetween', 'createdAt': datetime.now(), 'value': secondsBetween}
+        self.__save_new_configuration(secondsBetweenEntity)
 
     def get_arduino_port(self) -> str:
         port = self.__get_configuration_by_name('port')
         if port is None:
-            return self.__get_arduino_port_from_config_file()
+            return self.__get_default_value_from_config_file('port')
         return port['value']
 
     def set_arduino_port(self, port: str):
         portEntity = {'name': 'port', 'createdAt': datetime.now(), 'value': port}
         self.__save_new_configuration(portEntity)
 
-    def __get_arduino_port_from_config_file(self) -> str:
+    def __get_default_value_from_config_file(self, configurationName: str) -> str:
         with open('config.json') as configFile:
-            return json.load(configFile)['port']
+            return json.load(configFile)[configurationName]
 
     def __get_configuration_by_name(self, configurationName: str) -> dict:
         return self.mongoClient.db.configurations.find_one({'name': configurationName})
