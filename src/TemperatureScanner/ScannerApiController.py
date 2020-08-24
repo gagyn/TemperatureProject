@@ -28,24 +28,31 @@ frequentRecordsReaderService = FrequentRecordsReaderService(configurationService
 backgroundThread = threading.Thread(target=frequentRecordsReaderService.read_frequently, name='frequentRecordsReader')
 backgroundThread.start()
 
-@app.route('/readnow', methods=['GET'])
+@app.route('/readnow', methods=['POST'])
 def read_now():
+    shouldSaveToBase = request.json['shouldSave'].lower() == 'true'
     temperature = arduinoService.read_now()
     temperatureEntity = {'createdAt': datetime.now(), 'value': temperature, 'basedOnRecordsCount': configurationService.get_records_count()}
-    mongo.db.temperatures.insert_one(temperatureEntity)
-    return jsonify({'text': 'OK - reading was completed', 'value': temperatureEntity})
+    if shouldSaveToBase:
+        mongo.db.temperatures.insert_one(temperatureEntity)
+    return jsonify({'response': 'OK - reading was completed', 'value': temperatureEntity})
 
 @app.route('/setport', methods=['POST'])
 def set_port():
     port = str(request.json['port'])
     configurationService.set_arduino_port(port)
-    return jsonify({'text': 'OK - Arduino port changed'})
+    return jsonify({'response': 'OK - Arduino port changed'})
 
 @app.route('/setrecordscount', methods=['POST'])
 def set_records_count():
     recordsCount = int(request.json['recordsCount'])
     configurationService.set_records_count(recordsCount)
-    return jsonify({'text': 'OK - Records count changed'})
+    return jsonify({'response': 'OK - Records count changed'})
 
+@app.route('/setsecondsbetween', methods=['POST'])
+def set_seconds_between_records():
+    secondsBetween = int(request['secondsBetween'])
+    configurationService.set_records_seconds_between(secondsBetween)
+    return jsonify({'response': 'OK - Seconds between records changed'})
 
 app.run()
