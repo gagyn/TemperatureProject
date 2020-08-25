@@ -9,9 +9,13 @@ class FrequentRecordsReaderService:
         self.configurationService = configurationService
         self.arduinoService = arduinoService
         self.mongo = mongo
+        self.stopped = configurationService.get_reading_state() == 'paused'
 
-    def read_frequently(self):
-        while True:
+    def stop_reading(self):
+        self.stopped = True
+
+    def start_reading_frequently(self):
+        while self.stopped is False:
             recordsCount = self.configurationService.get_records_count()
             record = self.arduinoService.read_now(records_count=recordsCount)
             temperatureEntity = {'createdAt': datetime.now(), 'value': record, 'basedOnRecordsCount': recordsCount}
@@ -22,6 +26,6 @@ class FrequentRecordsReaderService:
         secondsBetween = self.configurationService.get_records_seconds_between()
         for i in range(secondsBetween):
             time.sleep(1)
-            currentConfiguration = self.configurationService.get_records_seconds_between()
-            if currentConfiguration == 0:
+            currentConfiguration = self.configurationService.get_reading_state()
+            if currentConfiguration == 'paused':
                 return

@@ -36,6 +36,16 @@ class ConfigurationService:
         portEntity = {'name': 'port', 'createdAt': datetime.now(), 'value': port}
         self.__save_new_configuration(portEntity)
 
+    def get_reading_state(self) -> str:
+        state = self.__get_configuration_by_name('readingState')
+        if state is None:
+            return 'stopped'
+        return state['value']
+
+    def set_reading_state(self, readingState: str) -> str:
+        stateEntity = {'name': 'readingState', 'createdAt': datetime.now(), 'value': readingState}
+        self.__save_new_configuration(stateEntity)
+        
     def __get_default_value_from_config_file(self, configurationName: str) -> str:
         with open('config.json') as configFile:
             return json.load(configFile)[configurationName]
