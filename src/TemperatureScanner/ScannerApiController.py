@@ -25,7 +25,7 @@ serialReader = SerialReader(port)
 serialWriter = SerialWriter(port)
 arduinoService = ArduinoService(serialReader, serialWriter, configurationService)
 frequentRecordsReaderService = FrequentRecordsReaderService(configurationService, arduinoService, mongo)
-backgroundThread = threading.Thread(target=frequentRecordsReaderService.start_reading_frequently, name='frequentRecordsReader')
+backgroundThread = threading.Thread(target=frequentRecordsReaderService.start_frequent_service, name='frequentRecordsReader')
 backgroundThread.start()
 
 @app.route('/readnow', methods=['POST'])
@@ -53,6 +53,7 @@ def set_records_count():
 def set_seconds_between_records():
     secondsBetween = int(request['secondsBetween'])
     configurationService.set_records_seconds_between(secondsBetween)
+    frequentRecordsReaderService.restart_reading()
     return jsonify({'response': 'OK - Seconds between records changed'})
 
 @app.route('/pause', methods=['GET'])
@@ -60,7 +61,6 @@ def pause_reading():
     state = configurationService.get_reading_state()
     if state == 'paused':
         return jsonify({'response': 'ERR - Reading is already paused'})
-    configurationService.set_reading_state('paused')
     frequentRecordsReaderService.stop_reading()
     return jsonify({'response': 'OK - Reading has been stopped'})
 
@@ -69,7 +69,7 @@ def start_reading():
     state = configurationService.get_reading_state()
     if state == 'running':
         return jsonify({'response': 'ERR - Reading is already running'})
-    configurationService.set_reading_state('running')
+    frequentRecordsReaderService.start_reading()
     return jsonify({'response': 'OK - Reading has been started'})
 
 app.run()
