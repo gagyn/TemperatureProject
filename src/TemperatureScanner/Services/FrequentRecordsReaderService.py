@@ -21,8 +21,8 @@ class FrequentRecordsReaderService:
 
             recordsCount = self.configurationService.get_records_count()
             record = self.arduinoService.read_now(records_count=recordsCount)
-            temperatureEntity = {'createdAt': datetime.now(), 'value': record, 'basedOnRecordsCount': recordsCount}
-            mongo.db.temperatures.insert_one(temperatureEntity)
+            temperatureEntity = {'createdAt': datetime.datetime.now(), 'value': record, 'basedOnRecordsCount': recordsCount}
+            self.mongo.db.temperatures.insert_one(temperatureEntity)
             lastSecondBeforeStopped = self.__wait_till_next_record()
 
             while self.__toRestart:
