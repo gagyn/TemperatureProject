@@ -1,4 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
-    "python.pythonPath": "venv\\Scripts\\python.exe"
+    "python.pythonPath": "venv\\Scripts\\python.exe",
+    "files.associations": {
+        "exception": "cpp"
+    }
 }

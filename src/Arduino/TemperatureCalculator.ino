@@ -1,7 +1,7 @@
 namespace TemperatureProject
 {
   constexpr int ARDUINO_MAX_VOLTAGE = 5;
-  constexpr int R1 = 46000; // first resistor in circuit - check yours
+  constexpr int R1 = 17300; // first resistor in circuit - check yours
 
   // values specified for concrete thermistor - yours probably has different values
   constexpr int B = 3950;
@@ -25,8 +25,8 @@ namespace TemperatureProject
   inline double TemperatureCalculator::calculateTemp(const double resistance)
   {
     double logR = log(resistance / R0);
-    double reversedT = 1 / T0 + 1 / B * logR;
-    return 1 / reversedT - 273.15;
+    double reversedT = 1.0 / T0 + 1.0 / B * logR;
+    return 1.0 / reversedT - 273.15;
   }
 
   inline double TemperatureCalculator::getTemp(const int rawInputValue)
