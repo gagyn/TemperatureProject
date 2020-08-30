@@ -32,12 +32,12 @@ void setup()
 
 void loop()
 {
-  if (!Serial.available())
+  while (!Serial.available())
   {
     delay(100);
-    return;
   }
-  int numberOfRecords = Serial.readString().toInt();
+  String fromSerial = Serial.readString();
+  int numberOfRecords = fromSerial.toInt();
   TemperatureProject::TemperatureScanner scanner;
   scanner.printRecords(numberOfRecords);
 }

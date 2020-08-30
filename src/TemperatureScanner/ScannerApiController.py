@@ -2,8 +2,7 @@ from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 import json
 from TemperatureScanner.Services.ArduinoService import ArduinoService
-from TemperatureScanner.Integration.Adruino.SerialReader import SerialReader
-from TemperatureScanner.Integration.Adruino.SerialWriter import SerialWriter
+from TemperatureScanner.Integration.Adruino.SerialHandler import SerialHandler
 from Common.Configuration.ConfigurationService import ConfigurationService
 from TemperatureScanner.Services.FrequentRecordsReaderService import FrequentRecordsReaderService
 from datetime import datetime
@@ -21,9 +20,8 @@ mongo = PyMongo(app)
 
 configurationService = ConfigurationService(mongo)
 port = configurationService.get_arduino_port()
-serialReader = SerialReader(port)
-serialWriter = SerialWriter(port)
-arduinoService = ArduinoService(serialReader, serialWriter, configurationService)
+serialHandler = SerialHandler(port)
+arduinoService = ArduinoService(serialHandler, configurationService)
 frequentRecordsReaderService = FrequentRecordsReaderService(configurationService, arduinoService, mongo)
 backgroundThread = threading.Thread(target=frequentRecordsReaderService.start_frequent_service, name='frequentRecordsReader')
 backgroundThread.start()
