@@ -24,7 +24,7 @@ namespace TemperatureProject
 
 void setup()
 {
-  Serial.begin(19200);
+  Serial.begin(250000);
   Serial.setTimeout(100);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
