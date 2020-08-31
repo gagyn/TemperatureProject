@@ -14,14 +14,14 @@ class FrequentRecordsReaderService:
         self.__toRestart = False
 
     def start_frequent_service(self):
+        time.sleep(1)
         while True:
             if self.stopped:
                 time.sleep(1)
                 continue
 
-            recordsCount = self.configurationService.get_records_count()
-            record = self.arduinoService.read_now(records_count=recordsCount)
-            temperatureEntity = {'createdAt': datetime.datetime.now(), 'value': record, 'basedOnRecordsCount': recordsCount}
+            (temperature, basedOnRecordsCount) = self.arduinoService.read_now()
+            temperatureEntity = {'createdAt': datetime.datetime.utcnow(), 'value': temperature, 'basedOnRecordsCount': basedOnRecordsCount}
             self.mongo.db.temperatures.insert_one(temperatureEntity)
             lastSecondBeforeStopped = self.__wait_till_next_record()
 

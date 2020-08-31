@@ -7,7 +7,7 @@ class ArduinoService:
         self.serialHandler = serialHandler
         self.configurationService = configurationService
 
-    def read_now(self, records_count = 0) -> float:
+    def read_now(self, records_count = 0) -> (float, int):
         if records_count == 0:
             records_count = self.configurationService.get_records_count()
 
@@ -17,8 +17,7 @@ class ArduinoService:
             raise Exception('not connected to arduino')
         
         recordsAsNumbers = [float(x) for x in records]
-        print(len(recordsAsNumbers))
-        return self.__calculate_avg_temperature(recordsAsNumbers)
+        return self.__calculate_avg_temperature(recordsAsNumbers), len(recordsAsNumbers)
 
     def __calculate_avg_temperature(self, records: List[float]) -> float:
         records.sort()

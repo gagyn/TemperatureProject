@@ -20,7 +20,7 @@ class ConfigurationService:
         secondsBetween = self.__get_configuration_by_name('secondsBetween')
         if secondsBetween is None:
             return int(self.__get_default_value_from_config_file('secondsBetween'))
-        return secondsBetween
+        return secondsBetween['value']
 
     def set_records_seconds_between(self, secondsBetween: int):
         secondsBetweenEntity = {'name': 'secondsBetween', 'createdAt': datetime.now(), 'value': secondsBetween}

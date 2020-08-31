@@ -28,8 +28,8 @@ backgroundThread.start()
 
 @app.route('/readnow', methods=['POST'])
 def read_now():
-    temperature = arduinoService.read_now()
-    temperatureEntity = {'createdAt': datetime.now(), 'value': temperature, 'basedOnRecordsCount': configurationService.get_records_count()}
+    (temperature, basedOnRecordsCount) = arduinoService.read_now()
+    temperatureEntity = {'createdAt': datetime.utcnow(), 'value': temperature, 'basedOnRecordsCount': basedOnRecordsCount}
     shouldSaveToBase = request.args.get('shouldSave')
     if shouldSaveToBase is not None and shouldSaveToBase.lower() == 'true':
         mongo.db.temperatures.insert_one(temperatureEntity)
@@ -49,7 +49,7 @@ def set_records_count():
 
 @app.route('/setsecondsbetween', methods=['POST'])
 def set_seconds_between_records():
-    secondsBetween = int(request['secondsBetween'])
+    secondsBetween = int(request.json['secondsBetween'])
     configurationService.set_records_seconds_between(secondsBetween)
     frequentRecordsReaderService.restart_reading()
     return jsonify({'response': 'OK - Seconds between records changed'})
