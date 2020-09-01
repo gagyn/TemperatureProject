@@ -12,7 +12,7 @@ class ArduinoService:
             records_count = self.configurationService.get_records_count()
 
         self.serialHandler.write(records_count)
-        records: List[str] = list(self.serialHandler.read(records_count))
+        records: List[str] = list(self.serialHandler.read())
         if len(records) == 0:
             raise Exception('not connected to arduino')
         

@@ -12,6 +12,6 @@ class SerialHandler:
     def write(self, stringToWrite):
         SerialHandler.__serial.write(str(stringToWrite).encode())
 
-    def read(self, requestedLinesCount = 0) -> List[str]:
+    def read(self) -> List[str]:
         lines = SerialHandler.__serial.readlines()
         return [x.decode() for x in lines]

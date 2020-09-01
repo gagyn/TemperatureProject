@@ -29,7 +29,7 @@ backgroundThread.start()
 @app.route('/readnow', methods=['POST'])
 def read_now():
     (temperature, basedOnRecordsCount) = arduinoService.read_now()
-    temperatureEntity = {'createdAt': datetime.utcnow(), 'value': temperature, 'basedOnRecordsCount': basedOnRecordsCount}
+    temperatureEntity = {'createdAt': datetime.utcnow(), 'value': temperature, 'basedOnRecordsCount': basedOnRecordsCount, 'sensorNameId': 'out1'}
     shouldSaveToBase = request.args.get('shouldSave')
     if shouldSaveToBase is not None and shouldSaveToBase.lower() == 'true':
         mongo.db.temperatures.insert_one(temperatureEntity)
