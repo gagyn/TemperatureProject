@@ -10,8 +10,7 @@ class FrequentRecordsReaderService:
         self.arduinoService = arduinoService
         self.mongo = mongo
         self.stopped = configurationService.get_reading_state() == 'paused'
-        self.__toStop = False
-        self.__toRestart = False
+        self._toRestart = False
 
     def start_frequent_service(self):
         time.sleep(1)
@@ -23,38 +22,33 @@ class FrequentRecordsReaderService:
             (temperature, basedOnRecordsCount) = self.arduinoService.read_now()
             temperatureEntity = {'createdAt': datetime.datetime.utcnow(), 'value': temperature, 'basedOnRecordsCount': basedOnRecordsCount, 'sensorNameId': 'out1'}
             self.mongo.db.temperatures.insert_one(temperatureEntity)
-            lastSecondBeforeStopped = self.__wait_till_next_record()
+            lastSecondBeforeStopped = self._wait_till_next_record()
 
-            while self.__toRestart:
-                self.__toRestart = False
-                self.__wait_till_next_record(lastSecondBeforeStopped)
-            if self.__toStop:
-                self.__toStop = False
-                return
+            while self._toRestart:
+                self._toRestart = False
+                self._wait_till_next_record(lastSecondBeforeStopped)
             
     def start_reading(self):
         self.stopped = False
-        self.__toRestart = False
-        self.__toStop = False
+        self._toRestart = False
         self.configurationService.set_reading_state('running')
 
     def stop_reading(self):
         self.stopped = True
-        self.__toStop = True
         self.configurationService.set_reading_state('paused')
 
     def restart_reading(self):
-        self.__toRestart = True
+        self._toRestart = True
 
-    def __wait_till_next_record(self, startWith = 0) -> int: # returns the second when was stopped
+    def _wait_till_next_record(self, startWith = 0) -> int: # returns the second when was stopped
         secondsBetween = self.configurationService.get_records_seconds_between()
         for i in range(startWith, secondsBetween):
             time.sleep(1)
-            if self.__toStop:
+            if self.stopped:
                 return i
-            if self.__toRestart:
+            if self._toRestart:
                 newSecondsBetween = self.configurationService.get_records_seconds_between()
                 if i <= newSecondsBetween:
-                    self.__toRestart = False
+                    self._toRestart = False
                 return i
         return secondsBetween

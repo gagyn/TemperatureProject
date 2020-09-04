@@ -17,9 +17,9 @@ class ArduinoService:
             raise Exception('not connected to arduino')
         
         recordsAsNumbers = [float(x) for x in records]
-        return self.__calculate_avg_temperature(recordsAsNumbers), len(recordsAsNumbers)
+        return self._calculate_avg_temperature(recordsAsNumbers), len(recordsAsNumbers)
 
-    def __calculate_avg_temperature(self, records: List[float]) -> float:
+    def _calculate_avg_temperature(self, records: List[float]) -> float:
         records.sort()
         count = len(records)
         start = count // 10
