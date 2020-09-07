@@ -7,6 +7,5 @@ services:
             - "/dev/ttyACM0:/dev/ttyACM0"
         volumes: 
             - ./config.json:/app/config.json
-            - ./logs:/app/logs
         ports: 
             - "5000:5000"
