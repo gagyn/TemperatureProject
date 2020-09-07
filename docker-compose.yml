@@ -8,3 +8,5 @@ services:
         volumes: 
             - ./config.json:/app/config.json
             - ./logs:/app/logs
+        ports: 
+            - "5000:5000"
