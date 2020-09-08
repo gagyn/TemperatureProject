@@ -70,4 +70,5 @@ def start_reading():
     frequentRecordsReaderService.start_reading()
     return jsonify({'response': 'OK - Reading has been started'})
 
-app.run()
+if __name__ == '__main__':
+    app.run()
