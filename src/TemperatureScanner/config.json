@@ -1,5 +1,5 @@
 {
-    "port": "/dev/ttyACM0",
+    "port": "SERIAL_PORT",
     "recordsCount": 1000,
     "secondsBetween": 60,
     "mongoConnectionString": "mongodb://localhost:27017/temperatureProject",

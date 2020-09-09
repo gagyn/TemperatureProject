@@ -1,11 +1,23 @@
 version: '3'
 services:
     temperatureScanner:
-        image: gagyn/temperature_project
+        build: 
+            context: ./src
+            dockerfile: ./src/TemperatureScanner
+        # image: gagyn/temperature_project
+        container_name: flask
         restart: "unless-stopped"
         devices: 
-            - "/dev/ttyACM0:/dev/ttyACM0"
+            - "/dev/ttyACM0:SERIAL_PORT"
         volumes: 
             - ./config.json:/app/config.json
-        ports: 
-            - "5000:5000"
+        environment:
+            - APP_NAME=MyFlaskApp
+        expose: 
+            - 8080
+    nginx:
+        build: ./src/nginx
+        container_name: nginx
+        restart: "unless-stopped"
+        ports:
+        - "80:80"
