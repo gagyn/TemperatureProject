@@ -7,7 +7,7 @@ from Common.Configuration.ConfigurationService import ConfigurationService
 from TemperatureScanner.Services.FrequentRecordsReaderService import FrequentRecordsReaderService
 from datetime import datetime
 import threading
-
+import os
 app = Flask(__name__)
 
 with open('config.json') as configFile:
@@ -28,6 +28,7 @@ backgroundThread.start()
 
 @app.route('/readnow', methods=['POST'])
 def read_now():
+    print(os.getenv("APP_NAME"))
     (temperature, basedOnRecordsCount) = arduinoService.read_now()
     temperatureEntity = {'createdAt': datetime.utcnow(), 'value': temperature, 'basedOnRecordsCount': basedOnRecordsCount, 'sensorNameId': 'out1'}
     shouldSaveToBase = request.args.get('shouldSave')
@@ -58,7 +59,7 @@ def set_seconds_between_records():
 def pause_reading():
     state = configurationService.get_reading_state()
     if state == 'paused':
-        return jsonify({'response': 'ERR - Reading is already paused'})
+        return 400, 'Reading is already paused'
     frequentRecordsReaderService.stop_reading()
     return jsonify({'response': 'OK - Reading has been stopped'})
 
@@ -66,7 +67,7 @@ def pause_reading():
 def start_reading():
     state = configurationService.get_reading_state()
     if state == 'running':
-        return jsonify({'response': 'ERR - Reading is already running'})
+        return 400, 'Reading is already running'
     frequentRecordsReaderService.start_reading()
     return jsonify({'response': 'OK - Reading has been started'})
 
