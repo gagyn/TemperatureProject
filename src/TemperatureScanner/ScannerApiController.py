@@ -10,7 +10,12 @@ import threading
 import os
 app = Flask(__name__)
 
-with open('config.json') as configFile:
+if app.debug:
+    configFileName = 'config-dev.json'
+else:
+    configFileName = 'config.json'
+
+with open(configFileName) as configFile:
     data = json.load(configFile)
     
 app.config['MONGO_DBNAME'] = data['mongoDbName']
@@ -28,7 +33,6 @@ backgroundThread.start()
 
 @app.route('/readnow', methods=['POST'])
 def read_now():
-    print(os.getenv("APP_NAME"))
     (temperature, basedOnRecordsCount) = arduinoService.read_now()
     temperatureEntity = {'createdAt': datetime.utcnow(), 'value': temperature, 'basedOnRecordsCount': basedOnRecordsCount, 'sensorNameId': 'out1'}
     shouldSaveToBase = request.args.get('shouldSave')
