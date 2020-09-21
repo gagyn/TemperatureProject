@@ -9,7 +9,7 @@ services:
         volumes: 
             - ./config.json:/app/config.json
         environment:
-            - APP_NAME=MyFlaskApp
+            - APP_NAME=run.py
         expose: 
             - 8080
     nginx:
