@@ -15,18 +15,13 @@ class FrequentRecordsReaderService:
     def start_frequent_service(self):
         time.sleep(1)
         while True:
-            if self.stopped:
-                time.sleep(1)
-                continue
-
-            (temperature, basedOnRecordsCount) = self.arduinoService.read_now()
-            temperatureEntity = {'createdAt': datetime.datetime.utcnow(), 'value': temperature, 'basedOnRecordsCount': basedOnRecordsCount, 'sensorNameId': 'out1'}
-            self.mongo.db.temperatures.insert_one(temperatureEntity)
-            lastSecondBeforeStopped = self._wait_till_next_record()
-
-            while self._toRestart:
-                self._toRestart = False
-                self._wait_till_next_record(lastSecondBeforeStopped)
+            try:
+                self._wait_if_stopped()            
+                temperatureEntity = self._read_temperature()
+                self._add_to_base(temperatureEntity)
+                self._wait_and_handle_restarts()
+            except Exception as e:
+                print(e)
             
     def start_reading(self):
         self.stopped = False
@@ -39,6 +34,26 @@ class FrequentRecordsReaderService:
 
     def restart_reading(self):
         self._toRestart = True
+
+    def make_temperature_entity(self, value: float, recordsCount: int, sensorName: str) -> dict:
+        return {'createdAt': datetime.datetime.utcnow(), 'value': value, 'basedOnRecordsCount': recordsCount, 'sensorNameId': sensorName}
+
+    def _wait_if_stopped(self):
+        while self.stopped:
+            time.sleep(1)
+
+    def _read_temperature(self) -> dict:
+        (temperature, basedOnRecordsCount) = self.arduinoService.read_now()
+        return self.make_temperature_entity(temperature, basedOnRecordsCount, 'out1')
+
+    def _add_to_base(self, temperatureEntity: dict):
+        self.mongo.db.temperatures.insert_one(temperatureEntity)
+        
+    def _wait_and_handle_restarts(self):
+        lastSecondBeforeStopped = self._wait_till_next_record()
+        while self._toRestart:
+            self._toRestart = False
+            self._wait_till_next_record(lastSecondBeforeStopped)
 
     def _wait_till_next_record(self, startWith = 0) -> int: # returns the second when was stopped
         secondsBetween = self.configurationService.get_records_seconds_between()

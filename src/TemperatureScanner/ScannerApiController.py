@@ -34,11 +34,12 @@ backgroundThread.start()
 @app.route('/readnow', methods=['POST'])
 def read_now():
     (temperature, basedOnRecordsCount) = arduinoService.read_now()
-    temperatureEntity = {'createdAt': datetime.utcnow(), 'value': temperature, 'basedOnRecordsCount': basedOnRecordsCount, 'sensorNameId': 'out1'}
+    temperatureEntity = frequentRecordsReaderService.make_temperature_entity(temperature, basedOnRecordsCount, 'out1')
     shouldSaveToBase = request.args.get('shouldSave')
+    temperatureToReturn = dict(temperatureEntity)
     if shouldSaveToBase is not None and shouldSaveToBase.lower() == 'true':
         mongo.db.temperatures.insert_one(temperatureEntity)
-    return jsonify({'response': 'OK - reading was completed', 'value': temperatureEntity})
+    return jsonify({'response': 'OK - reading was completed', 'value': temperatureToReturn})
 
 @app.route('/setport', methods=['POST'])
 def set_port():
