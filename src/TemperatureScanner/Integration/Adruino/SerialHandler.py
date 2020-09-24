@@ -6,8 +6,8 @@ class SerialHandler:
     _serial = None
     def __init__(self, arduinoPort: str):
         if SerialHandler._serial is None:
-            SerialHandler._serial = Serial(arduinoPort, baudrate=250000, write_timeout=0.5, timeout=0.5)
-            sleep(2)
+            SerialHandler._serial = Serial(arduinoPort, baudrate=250000, write_timeout=0.5, timeout=0.8)
+            sleep(3)
 
     def write(self, stringToWrite):
         SerialHandler._serial.write(str(stringToWrite).encode())

@@ -1,6 +1,7 @@
 from TemperatureScanner.Integration.Adruino.SerialHandler import SerialHandler
 from Common.Configuration.ConfigurationService import ConfigurationService
 from typing import List
+from time import sleep
 
 class ArduinoService:
     def __init__(self, serialHandler: SerialHandler, configurationService: ConfigurationService):
@@ -12,6 +13,7 @@ class ArduinoService:
             records_count = self.configurationService.get_records_count()
 
         self.serialHandler.write(records_count)
+        sleep(0.2)
         records = self.serialHandler.read()
         if len(records) == 0:
             raise Exception('not connected to arduino')
