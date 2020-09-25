@@ -1,24 +1,26 @@
 # TemperatureProject
 Scanning and saving temperature using Raspberry PI and Arduino
 
-## Run the app using Docker:
+## Download config and docker-compose file:
 
-`git clone https://github.com/gagyn/TemperatureProject.git`
+##### Linux:
+`curl -o docker-compose.yml https://raw.githubusercontent.com/gagyn/TemperatureProject/master/docker-compose.yml && curl -o config.json https://raw.githubusercontent.com/gagyn/TemperatureProject/master/config.json`
 
-### Now edit file ***config.json*** with your Arduino port!
+##### Powershell:
+`curl -o docker-compose.yml https://raw.githubusercontent.com/gagyn/TemperatureProject/add-api/docker-compose.yml; curl -o config.json https://raw.githubusercontent.com/gagyn/TemperatureProject/add-api/config.json`
+
+### Now edit file ***config.json*** and ***docker-compose.yml*** with your Arduino port!
 
 For me the USB port where Arduino is plugged in, is /dev/ttyACM0. You may have it somewhere else, so check it before.
 
-`docker build -t temperature .`
+### Mongo database
 
-`docker run -d --device=/dev/ttyACM0 --name temperature temperature`
+You can use mongo database on localhost or put your link to external database in ***config.json*** file.
 
-Again, you need to change the port to yours.
+### Run temperature scanner and API using docker-compose
 
-## After a few minutes, if you want to get all the temperatures data, use command:
+`docker-compose up`
 
-`docker logs temperature`
+### Scanning started...
 
-alternatively:
-
-`docker exec -it temperature cat temperatures.txt`
+Now your scanner has started and it's saving temperatures records in mongo database.
