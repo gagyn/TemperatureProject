@@ -7,10 +7,10 @@ services:
   - docker
 
 before_install:
-  - docker build -t "$DOCKERHUB_LOGIN"/temperature_project:scanner-arm -f ./src/TemperatureScanner/Dockerfile ./src
-  - docker build -t "$DOCKERHUB_LOGIN"/temperature_project:nginx-arm -f ./src/nginx/Dockerfile ./src/nginx/
+  - docker build -t "$DOCKERHUB_LOGIN"/temperature_project:scanner-"$TRAVIS_CPU_ARCH" -f ./src/TemperatureScanner/Dockerfile ./src
+  - docker build -t "$DOCKERHUB_LOGIN"/temperature_project:nginx-"$TRAVIS_CPU_ARCH" -f ./src/nginx/Dockerfile ./src/nginx/
 
-deploy:
+script:
   - echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_LOGIN" --password-stdin
-  - docker push "$DOCKERHUB_LOGIN"/temperature_project:scanner-arm32
-  - docker push "$DOCKERHUB_LOGIN"/temperature_project:nginx-arm32
+  - docker push "$DOCKERHUB_LOGIN"/temperature_project:scanner-"$TRAVIS_CPU_ARCH"
+  - docker push "$DOCKERHUB_LOGIN"/temperature_project:nginx-"$TRAVIS_CPU_ARCH"
