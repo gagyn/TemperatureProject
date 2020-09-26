@@ -1,7 +1,7 @@
 version: '3'
 services:
     temperatureScanner:
-        image: gagyn/temperature_project
+        image: gagyn/temperature_project:scanner
         container_name: flask
         restart: "unless-stopped"
         devices: 
@@ -13,7 +13,7 @@ services:
         expose: 
             - 8080
     nginx:
-        build: ./src/nginx
+        image: gagyn/temperature_project:nginx
         container_name: nginx
         restart: "unless-stopped"
         ports:
