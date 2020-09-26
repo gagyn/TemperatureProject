@@ -1,0 +1,14 @@
+arch:
+  - arm32
+  
+services:
+  - docker
+
+before_install:
+  - docker build -t $DOCKERHUB_LOGIN/temperature_project:scanner-arm32 -f ./src/TemperatureScanner/Dockerfile ./src
+  - docker build -t $DOCKERHUB_LOGIN/temperature_project:nginx-arm32 -f ./src/nginx/Dockerfile ./src/nginx/
+
+deploy:
+  - docker login -p $DOCKERHUB_PASS -u $DOCKERHUB_LOGIN
+  - docker push $DOCKERHUB_LOGIN/temperature_project:scanner-arm32
+  - docker push $DOCKERHUB_LOGIN/temperature_project:nginx-arm32
