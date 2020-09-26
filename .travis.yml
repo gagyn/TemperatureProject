@@ -1,14 +1,16 @@
+dist: bionic
+os: linux
 arch:
-  - arm32
-  
+  - arm64
+
 services:
   - docker
 
 before_install:
-  - docker build -t $DOCKERHUB_LOGIN/temperature_project:scanner-arm32 -f ./src/TemperatureScanner/Dockerfile ./src
-  - docker build -t $DOCKERHUB_LOGIN/temperature_project:nginx-arm32 -f ./src/nginx/Dockerfile ./src/nginx/
+  - docker build -t "$DOCKERHUB_LOGIN"/temperature_project:scanner-arm -f ./src/TemperatureScanner/Dockerfile ./src
+  - docker build -t "$DOCKERHUB_LOGIN"/temperature_project:nginx-arm -f ./src/nginx/Dockerfile ./src/nginx/
 
 deploy:
-  - docker login -p $DOCKERHUB_PASS -u $DOCKERHUB_LOGIN
-  - docker push $DOCKERHUB_LOGIN/temperature_project:scanner-arm32
-  - docker push $DOCKERHUB_LOGIN/temperature_project:nginx-arm32
+  - echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_LOGIN" --password-stdin
+  - docker push "$DOCKERHUB_LOGIN"/temperature_project:scanner-arm32
+  - docker push "$DOCKERHUB_LOGIN"/temperature_project:nginx-arm32
