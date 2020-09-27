@@ -10,6 +10,10 @@ class FrequentRecordsReaderService:
         self.arduinoService = arduinoService
         self.mongo = mongo
         self.stopped = configurationService.get_reading_state() == 'paused'
+        if self.stopped:
+            self.stop_reading()
+        else:
+            self.start_reading()
         self._toRestart = False
 
     def start_frequent_service(self):
