@@ -1,10 +1,10 @@
 dist: bionic
 os: linux
 
-env:
+global:
   - DOCKER_BUILDKIT=1
   - DOCKER_CLI_EXPERIMENTAL=enabled
-  
+
 services:
   - docker
 
