@@ -7,8 +7,7 @@ services:
   - docker
 
 script: #todo: delete script
-  - provider: script
-    script: bash ./scripts/deploy.sh
+  - ./scripts/deploy.sh
 
 deploy:
   - provider: script
