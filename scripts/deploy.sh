@@ -1,4 +1,5 @@
 sudo systemctl restart docker
+docker --version
 docker build --platform=local -o . git://github.com/docker/buildx
 mkdir -p ~/.docker/cli-plugins
 mv buildx ~/.docker/cli-plugins/docker-buildx
