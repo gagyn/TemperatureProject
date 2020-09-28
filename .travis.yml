@@ -1,22 +1,22 @@
 dist: bionic
 os: linux
 
-global:
-  - DOCKER_BUILDKIT=1
-  - DOCKER_CLI_EXPERIMENTAL=enabled
-
 services:
   - docker
 
 before_script:
   - chmod -R a+x scripts
+  - export DOCKER_BUILDKIT=1
+  - export DOCKER_CLI_EXPERIMENTAL=enabled
+  - sudo apt-get update
+  - sudo apt-get upgrade
 
 script: #todo: delete script
   - ./scripts/deploy.sh
 
 before_deploy:
-  - sudo apt update
-  - sudo apt upgrade
+  - sudo apt-get update
+  - sudo apt-get upgrade
 
 deploy:
   - provider: script
