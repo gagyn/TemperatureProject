@@ -6,17 +6,12 @@ arch:
 services:
   - docker
 
-before_install:
-  - sudo dpkg --add-architecture armhf
-  - sudo apt-get update -yq
-  - |-
-      sudo apt-get -yq install \
-      crossbuild-essential-armhf \
-      libc6:armhf
-  - docker build -t "$DOCKERHUB_LOGIN"/temperature_project:scanner-"$TRAVIS_CPU_ARCH" -f ./src/TemperatureScanner/Dockerfile.arm32 ./src
-  - docker build -t "$DOCKERHUB_LOGIN"/temperature_project:nginx-"$TRAVIS_CPU_ARCH" -f ./src/nginx/Dockerfile.arm32 ./src/nginx/
+script: #todo: delete script
+  - provider: script
+    script: bash ./script/deploy.sh
 
-script:
-  - echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_LOGIN" --password-stdin
-  - docker push "$DOCKERHUB_LOGIN"/temperature_project:scanner-"$TRAVIS_CPU_ARCH"
-  - docker push "$DOCKERHUB_LOGIN"/temperature_project:nginx-"$TRAVIS_CPU_ARCH"
+deploy:
+  - provider: script
+    script: bash ./script/deploy.sh
+    on:
+      branch: master

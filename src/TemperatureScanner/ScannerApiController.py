@@ -39,7 +39,7 @@ def read_now():
     temperatureToReturn = dict(temperatureEntity)
     if shouldSaveToBase is not None and shouldSaveToBase.lower() == 'true':
         mongo.db.temperatures.insert_one(temperatureEntity)
-    return jsonify({'response': 'OK - reading was completed', 'value': temperatureToReturn})
+    return jsonify({'response': 'OK - reading has been completed', 'value': temperatureToReturn})
 
 @app.route('/setport', methods=['POST'])
 def set_port():
