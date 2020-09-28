@@ -6,6 +6,9 @@ arch:
 services:
   - docker
 
+before_script:
+  - chmod -R a+x scripts
+
 script: #todo: delete script
   - ./scripts/deploy.sh
 
