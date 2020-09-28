@@ -8,10 +8,10 @@ services:
 
 script: #todo: delete script
   - provider: script
-    script: bash ./script/deploy.sh
+    script: bash ./scripts/deploy.sh
 
 deploy:
   - provider: script
-    script: bash ./script/deploy.sh
+    script: bash ./scripts/deploy.sh
     on:
       branch: master
