@@ -1,13 +1,21 @@
 dist: bionic
 os: linux
 
+addons:
+  apt:
+    packages:
+      - docker-ce
+
+env:
+  global:
+    - DOCKER_BUILDKIT=1
+    - DOCKER_CLI_EXPERIMENTAL=enabled
+    
 services:
   - docker
 
 before_script:
   - chmod -R a+x scripts
-  - export DOCKER_BUILDKIT=1
-  - export DOCKER_CLI_EXPERIMENTAL=enabled
   - sudo apt-get update
   - sudo apt-get upgrade
 
