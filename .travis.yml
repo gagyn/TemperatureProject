@@ -18,6 +18,7 @@ before_script:
   - mkdir -vp ~/.docker/cli-plugins/
   - curl --silent -L "https://github.com/docker/buildx/releases/download/v0.3.0/buildx-v0.3.0.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
   - chmod a+x ~/.docker/cli-plugins/docker-buildx
+  - docker buildx create --use --name build --node build --driver-opt network=host
   - chmod -R a+x scripts
 
 script: #todo: delete script
