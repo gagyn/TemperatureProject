@@ -1,14 +1,16 @@
-import time
 from Common.Configuration.ConfigurationService import ConfigurationService
 from TemperatureScanner.Services.ArduinoService import ArduinoService
+from TemperatureScanner.Services.WaitingService import WaitingService
+import time
 from flask_pymongo import PyMongo
 import datetime
 
 class FrequentRecordsReaderService:
-    def __init__(self, configurationService: ConfigurationService, arduinoService: ArduinoService, mongo: PyMongo):
+    def __init__(self, configurationService: ConfigurationService, arduinoService: ArduinoService, waitingService: WaitingService, mongo: PyMongo):
         self.configurationService = configurationService
         self.arduinoService = arduinoService
         self.mongo = mongo
+        self.waitingService = waitingService
         self.stopped = configurationService.get_reading_state() == 'paused'
         if self.stopped:
             self.stop_reading()
@@ -18,14 +20,7 @@ class FrequentRecordsReaderService:
 
     def start_frequent_service(self):
         time.sleep(1)
-        while True:
-            try:
-                self._wait_if_stopped()            
-                temperatureEntity = self._read_temperature()
-                self._add_to_base(temperatureEntity)
-                self._wait_and_handle_restarts()
-            except Exception as e:
-                print(e)
+        self.waitingService.start(self._read_and_save)
             
     def start_reading(self):
         self.stopped = False
@@ -41,6 +36,13 @@ class FrequentRecordsReaderService:
 
     def make_temperature_entity(self, value: float, recordsCount: int, sensorName: str) -> dict:
         return {'createdAt': datetime.datetime.utcnow(), 'value': value, 'basedOnRecordsCount': recordsCount, 'sensorNameId': sensorName}
+
+    def _read_and_save(self):
+        try:       
+            temperatureEntity = self._read_temperature()
+            self._add_to_base(temperatureEntity)
+        except Exception as e:
+            print(e)
 
     def _wait_if_stopped(self):
         while self.stopped:

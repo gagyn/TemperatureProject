@@ -5,6 +5,7 @@ from TemperatureScanner.Services.ArduinoService import ArduinoService
 from TemperatureScanner.Integration.Adruino.SerialHandler import SerialHandler
 from Common.Configuration.ConfigurationService import ConfigurationService
 from TemperatureScanner.Services.FrequentRecordsReaderService import FrequentRecordsReaderService
+from TemperatureScanner.Services.WaitingService import WaitingService
 from datetime import datetime
 import threading
 import os
@@ -27,7 +28,8 @@ configurationService = ConfigurationService(mongo)
 port = configurationService.get_arduino_port()
 serialHandler = SerialHandler(port)
 arduinoService = ArduinoService(serialHandler, configurationService)
-frequentRecordsReaderService = FrequentRecordsReaderService(configurationService, arduinoService, mongo)
+waitingService = WaitingService(configurationService)
+frequentRecordsReaderService = FrequentRecordsReaderService(configurationService, arduinoService, waitingService, mongo)
 backgroundThread = threading.Thread(target=frequentRecordsReaderService.start_frequent_service, name='frequentRecordsReader')
 backgroundThread.start()
 
