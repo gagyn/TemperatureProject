@@ -9,7 +9,7 @@ env:
 services:
   - docker
 
-before_script:
+before_deploy:
   - sudo rm -rf /var/lib/apt/lists/*
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) edge"
@@ -21,14 +21,7 @@ before_script:
   - docker buildx create --use --name build --node build --driver-opt network=host
   - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
   - chmod -R a+x scripts
-
-script: #todo: delete script
-  - ./scripts/deploy.sh
-
-before_deploy:
-  - sudo apt-get update
-  - sudo apt-get upgrade
-
+  
 deploy:
   - provider: script
     script: bash ./scripts/deploy.sh
