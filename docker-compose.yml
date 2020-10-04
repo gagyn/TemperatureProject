@@ -1,0 +1,20 @@
+version: '3'
+services:
+    temperatureScanner:
+        image: gagyn/temperature_project:scanner
+        container_name: flask
+        restart: "unless-stopped"
+        devices: 
+            - "/dev/ttyACM0:/dev/ttyACM0"
+        volumes: 
+            - ./config.json:/app/config.json
+        environment:
+            - APP_NAME=run.py
+        expose: 
+            - 8080
+    nginx:
+        image: gagyn/temperature_project:nginx
+        container_name: nginx
+        restart: "unless-stopped"
+        ports:
+        - "80:80"

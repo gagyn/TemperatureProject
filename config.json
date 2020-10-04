@@ -1,0 +1,7 @@
+{
+    "port": "/dev/ttyACM0",
+    "recordsCount": 1000,
+    "secondsBetween": 60,
+    "mongoConnectionString": "mongodb://localhost:27017/temperatureProject",
+    "mongoDbName": "temperatureProject"
+}

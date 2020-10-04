@@ -1,0 +1,30 @@
+dist: bionic
+os: linux
+language: generic
+
+env:
+  global:
+    - DOCKER_BUILDKIT=1
+    - DOCKER_CLI_EXPERIMENTAL=enabled
+
+services:
+  - docker
+
+before_deploy:
+  - sudo rm -rf /var/lib/apt/lists/*
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) edge"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  - mkdir -vp ~/.docker/cli-plugins/
+  - curl --silent -L "https://github.com/docker/buildx/releases/download/v0.3.0/buildx-v0.3.0.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+  - chmod a+x ~/.docker/cli-plugins/docker-buildx
+  - docker buildx create --use --name build --node build --driver-opt network=host
+  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  - chmod -R a+x scripts
+
+deploy:
+  - provider: script
+    script: bash ./scripts/deploy.sh
+    on:
+      branch: master
