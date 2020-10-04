@@ -10,13 +10,13 @@ Scanning and saving temperature using Raspberry PI and Arduino
 ##### Powershell:
 `curl -o docker-compose.yml https://raw.githubusercontent.com/gagyn/TemperatureProject/master/docker-compose.yml; curl -o config.json https://raw.githubusercontent.com/gagyn/TemperatureProject/master/config.json`
 
-### Now edit file ***config.json*** and ***docker-compose.yml*** with your Arduino port!
+### Edit file ***docker-compose.yml*** with your Arduino port!
 
 For me the USB port where Arduino is plugged in, is /dev/ttyACM0. You may have it somewhere else, so check it before.
 
 ### Mongo database
 
-You can use mongo database on localhost or put your link to external database in ***config.json*** file.
+You can use mongo database on localhost or put your link to an external database in ***config.json*** file.
 
 ### Run temperature scanner and API using docker-compose
 
